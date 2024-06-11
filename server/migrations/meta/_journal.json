@@ -15,6 +15,34 @@
       "when": 1717549848089,
       "tag": "0001_famous_synch",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1717760366799,
+      "tag": "0002_sticky_goliath",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1717760533512,
+      "tag": "0003_orange_madripoor",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1717760694843,
+      "tag": "0004_lively_black_widow",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1717761438036,
+      "tag": "0005_dusty_ricochet",
+      "breakpoints": true
     }
   ]
 }
