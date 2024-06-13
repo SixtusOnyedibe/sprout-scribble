@@ -22,6 +22,8 @@ import { useAction } from 'next-safe-action/hooks';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { emailRegister } from '@/server/actions/email-register';
+import { FormSuccess } from './form-success';
+import { FormError } from './form-error';
 
 export const RegisterForm = () => {
   // here the resolver ensures that all our inputs are verified
@@ -36,12 +38,12 @@ export const RegisterForm = () => {
   });
 
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const { execute, status } = useAction(emailRegister, {
     onSuccess(data) {
-      if (data.success) {
-        console.log(data.success);
-      }
+      if (data.error) setError(data.error);
+      if (data.success) setError(data.success);
     },
   });
 
@@ -116,6 +118,8 @@ export const RegisterForm = () => {
                   </FormItem>
                 )}
               />
+              <FormSuccess message={success} />
+              <FormError message={error} />
               <Button size={'sm'} variant={'link'} asChild>
                 <Link href='/auth/reset'>Forgot your password</Link>
               </Button>
