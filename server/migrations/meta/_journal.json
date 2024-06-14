@@ -43,6 +43,13 @@
       "when": 1717761438036,
       "tag": "0005_dusty_ricochet",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1718366798313,
+      "tag": "0006_grey_madame_hydra",
+      "breakpoints": true
     }
   ]
 }

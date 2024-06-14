@@ -10,50 +10,51 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form';
-import { AuthCard } from './auth-card';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LoginSchema } from '@/types/login-schema';
+import { AuthCard } from './auth-card';
 import * as z from 'zod';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import Link from 'next/link';
-import { emailSiginIn } from '@/server/actions/email.signin';
 import { useAction } from 'next-safe-action/hooks';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { FormSuccess } from './form-success';
 import { FormError } from './form-error';
+import { NewPasswordSchema } from '@/types/new-password-schema';
+import { newPassword } from '@/server/actions/new-password';
+import { ResetSchema } from '@/types/reset-schema';
+import { reset } from '@/server/actions/password-reset';
 
-export const LoginForm = () => {
-  // here the resolver ensures that all our inputs are verified
-  // zod is a library for input verification
-  const form = useForm({
-    resolver: zodResolver(LoginSchema),
+export default function ResetForm() {
+  const form = useForm<z.infer<typeof ResetSchema>>({
+    resolver: zodResolver(ResetSchema),
     defaultValues: {
       email: '',
-      password: '',
     },
   });
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const { execute, status } = useAction(emailSiginIn, {
+  const { execute, status } = useAction(reset, {
     onSuccess(data) {
       if (data?.error) setError(data.error);
-      if (data?.success) setSuccess(data.success);
+      if (data?.success) {
+        setSuccess(data.success);
+      }
     },
   });
 
-  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+  const onSubmit = (values: z.infer<typeof ResetSchema>) => {
     execute(values);
   };
 
   return (
     <AuthCard
-      cardTitle='Welcome back!'
-      backButtonHref='/auth/register'
-      backButtonLabel='Create a new account'
+      cardTitle='Forgot your password? '
+      backButtonHref='/auth/login'
+      backButtonLabel='Back to login'
       showSocials
     >
       <div>
@@ -65,32 +66,14 @@ export const LoginForm = () => {
                 name='email'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder='sixtusonyedibe@gmail.com'
-                        type='email'
-                        autoComplete='email'
-                      />
-                    </FormControl>
-                    <FormDescription />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='password'
-                render={({ field }) => (
-                  <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder='**********'
-                        type='password'
-                        autoComplete='current-password'
+                        placeholder='developedbyed@gmail.com'
+                        type='email'
+                        disabled={status === 'executing'}
+                        autoComplete='email'
                       />
                     </FormControl>
                     <FormDescription />
@@ -107,15 +90,15 @@ export const LoginForm = () => {
             <Button
               type='submit'
               className={cn(
-                'w-full my-2',
+                'w-full',
                 status === 'executing' ? 'animate-pulse' : ''
               )}
             >
-              {'Login'}
+              Reset Password
             </Button>
           </form>
         </Form>
       </div>
     </AuthCard>
   );
-};
+}
