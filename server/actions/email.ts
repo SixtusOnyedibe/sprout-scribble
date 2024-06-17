@@ -38,7 +38,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/auth/new-password?token=${token}`;
   const { data, error } = await resend.emails.send({
     from: 'onboarding@resend.dev',
-    to: email,
+    to: ['sixtusonyedibe@gmail.com'],
     subject: 'Sproud and Scribble - Confirmation Email',
     html: `<p>Click here <a href='${confirmLink}'>reset your password</a></p>`,
   });

@@ -4,6 +4,7 @@ import './globals.css';
 
 import Nav from '@/components/navigations/nav';
 import { cn } from '@/lib/utils';
+import { ThemeProvider } from '@/components/providers/theme-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,8 +24,10 @@ export default function RootLayout({
         className={cn('px-6 md:px-12 max-w-7xl mx-auto', `${inter.className}`)}
         suppressHydrationWarning={true} //solves this problem Warning: Extra attributes from the server: cz-shortcut-listen
       >
-        <Nav />
-        {children}
+        <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
+          <Nav />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -6,6 +6,8 @@ import {
   integer,
   boolean,
   pgEnum,
+  serial,
+  real,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccount } from 'next-auth/adapters';
 import { createId } from '@paralleldrive/cuid2';
@@ -90,7 +92,7 @@ export const twoFactorTokens = pgTable(
     token: text('token').notNull(),
     expires: timestamp('expires', { mode: 'date' }).notNull(),
     email: text('email').notNull(),
-    userID: text('userID').references(() => users.id, { onDelete: 'cascade' }),
+    userID: text('userID').references(() => users.id, { onDelete: 'cascade' }), //on delete cascade means that when we deletethe user, the twofactortoken gets deleted too
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.id, vt.token] }),
@@ -208,17 +210,17 @@ export const twoFactorTokens = pgTable(
 //   orders: many(orders, { relationName: "user_orders" }),
 // }))
 
-// export const orders = pgTable("orders", {
-//   id: serial("id").primaryKey(),
-//   userID: text("userID")
-//     .notNull()
-//     .references(() => users.id, { onDelete: "cascade" }),
-//   total: real("total").notNull(),
-//   status: text("status").notNull(),
-//   created: timestamp("created").defaultNow(),
-//   receiptURL: text("receiptURL"),
-//   paymentIntentID: text("paymentIntentID"),
-// })
+export const orders = pgTable('orders', {
+  id: serial('id').primaryKey(),
+  userID: text('userID')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  total: real('total').notNull(),
+  status: text('status').notNull(),
+  created: timestamp('created').defaultNow(),
+  receiptURL: text('receiptURL'),
+  paymentIntentID: text('paymentIntentID'),
+});
 
 // export const ordersRelations = relations(orders, ({ one, many }) => ({
 //   user: one(users, {

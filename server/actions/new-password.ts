@@ -7,12 +7,16 @@ import { db } from '..';
 import { eq } from 'drizzle-orm';
 import { passwordResetTokens, users } from '../schema';
 import bcrypt from 'bcrypt';
+import { Pool } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
 
 const action = createSafeActionClient();
 
 export const newPassword = action(
   NewPasswordSchema,
   async ({ password, token }) => {
+    const pool = new Pool({ connectionString: process.env.POSTGRES_URL });
+    const dbPool = drizzle(pool);
     // TO check the token, if they don't have the token, they shouldn't be allowed to login
     if (!token) {
       return { error: 'Missing Token' };
@@ -38,7 +42,7 @@ export const newPassword = action(
 
     // Update the password
     // The approach we would be taking here is transaction when one of our query fails, we should just revert back the entire operation/query.
-    await db.transaction(async (tx) => {
+    await dbPool.transaction(async (tx) => {
       // the tx here is for context and we can use it the same way we use db. eg tx.query
       await tx
         .update(users)
