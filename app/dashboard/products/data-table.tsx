@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import {
   ColumnDef,
@@ -9,7 +9,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from '@tanstack/react-table';
 import {
   Card,
   CardContent,
@@ -17,7 +17,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -25,23 +25,23 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { useState } from "react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { ChevronLeftIcon, ChevronRight, ChevronRightIcon } from "lucide-react"
+} from '@/components/ui/table';
+import { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { ChevronLeftIcon, ChevronRight, ChevronRightIcon } from 'lucide-react';
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data,
     columns,
@@ -53,10 +53,10 @@ export function DataTable<TData, TValue>({
       sorting,
       columnFilters,
     },
-  })
+  });
 
   return (
-    <div className="rounded-md border">
+    <div className='rounded-md border'>
       <Card>
         <CardHeader>
           <CardTitle>Your Products</CardTitle>
@@ -68,12 +68,12 @@ export function DataTable<TData, TValue>({
           <div>
             <div>
               <Input
-                placeholder="Filter Products"
+                placeholder='Filter Products'
                 value={
-                  (table.getColumn("title")?.getFilterValue() as string) ?? ""
+                  (table.getColumn('title')?.getFilterValue() as string) ?? ''
                 }
                 onChange={(event) =>
-                  table.getColumn("title")?.setFilterValue(event.target.value)
+                  table.getColumn('title')?.setFilterValue(event.target.value)
                 }
               />
             </div>
@@ -91,7 +91,7 @@ export function DataTable<TData, TValue>({
                                 header.getContext()
                               )}
                         </TableHead>
-                      )
+                      );
                     })}
                   </TableRow>
                 ))}
@@ -101,7 +101,7 @@ export function DataTable<TData, TValue>({
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
-                      data-state={row.getIsSelected() && "selected"}
+                      data-state={row.getIsSelected() && 'selected'}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={cell.id}>
@@ -117,7 +117,7 @@ export function DataTable<TData, TValue>({
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="h-24 text-center"
+                      className='h-24 text-center'
                     >
                       No results.
                     </TableCell>
@@ -125,27 +125,27 @@ export function DataTable<TData, TValue>({
                 )}
               </TableBody>
             </Table>
-            <div className="flex items-center justify-end gap-4 pt-4">
+            <div className='flex items-center justify-end gap-4 pt-4'>
               <Button
-                disabled={!table.getCanPreviousPage()}
+                disabled={!table.getCanPreviousPage()} //getCanPreviousPage returns true or false if it can go to the previous page
                 onClick={() => table.previousPage()}
-                variant="outline"
+                variant='outline'
               >
-                <ChevronLeftIcon className="w-4 h-4" />
+                <ChevronLeftIcon className='w-4 h-4' />
                 <span>Previous Page</span>
               </Button>
               <Button
                 disabled={!table.getCanNextPage()}
                 onClick={() => table.nextPage()}
-                variant="outline"
+                variant='outline'
               >
                 <span>Next page</span>
-                <ChevronRightIcon className="w-4 h-4" />
+                <ChevronRightIcon className='w-4 h-4' />
               </Button>
             </div>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
