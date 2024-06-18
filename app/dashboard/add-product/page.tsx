@@ -1,4 +1,4 @@
-import { auth } from "@/server/auth"
+import { auth } from "@/server/auth.config"
 import { redirect } from "next/navigation"
 import { useForm } from "react-hook-form"
 import ProductForm from "./product-form"

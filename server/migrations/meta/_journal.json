@@ -50,6 +50,20 @@
       "when": 1718366798313,
       "tag": "0006_grey_madame_hydra",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1718693114362,
+      "tag": "0007_daffy_ted_forrester",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1718699162238,
+      "tag": "0008_open_kid_colt",
+      "breakpoints": true
     }
   ]
 }

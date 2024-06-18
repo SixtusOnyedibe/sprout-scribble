@@ -31,7 +31,7 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { useAction } from 'next-safe-action/hooks';
 import { settings } from '@/server/actions/settings';
-// import { UploadButton } from '@/app/api/uploadthing/upload';
+import { UploadButton } from '@/app/api/uploadthing/upload';
 
 type SettingsForm = {
   session: Session;
@@ -120,7 +120,7 @@ export default function SettingsCard(session: SettingsForm) {
                         alt='User Image'
                       />
                     )}
-                    {/* <UploadButton
+                    <UploadButton
                       className='scale-75 ut-button:ring-primary  ut-label:bg-red-50  ut-button:bg-primary/75  hover:ut-button:bg-primary/100 ut:button:transition-all ut-button:duration-500  ut-label:hidden ut-allowed-content:hidden'
                       endpoint='avatarUploader'
                       onUploadBegin={() => {
@@ -145,7 +145,7 @@ export default function SettingsCard(session: SettingsForm) {
                           return <div>Uploading...</div>;
                         },
                       }}
-                    /> */}
+                    />
                   </div>
                   <FormControl>
                     <Input

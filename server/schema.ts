@@ -8,9 +8,11 @@ import {
   pgEnum,
   serial,
   real,
+  index,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccount } from 'next-auth/adapters';
 import { createId } from '@paralleldrive/cuid2';
+import { relations } from 'drizzle-orm';
 
 export const RoleEnum = pgEnum('roles', ['user', 'admin']);
 
@@ -99,116 +101,116 @@ export const twoFactorTokens = pgTable(
   })
 );
 
-// export const products = pgTable("products", {
-//   id: serial("id").primaryKey(),
-//   description: text("description").notNull(),
-//   title: text("title").notNull(),
-//   created: timestamp("created").defaultNow(),
-//   price: real("price").notNull(),
-// })
+export const products = pgTable('products', {
+  id: serial('id').primaryKey(), //serial would increment the product id by 1, 1,2,3,4
+  description: text('description').notNull(),
+  title: text('title').notNull(),
+  created: timestamp('created').defaultNow(),
+  price: real('price').notNull(),
+});
 
-// export const productVariants = pgTable("productVariants", {
-//   id: serial("id").primaryKey(),
-//   color: text("color").notNull(),
-//   productType: text("productType").notNull(),
-//   updated: timestamp("updated").defaultNow(),
-//   productID: serial("productID")
-//     .notNull()
-//     .references(() => products.id, { onDelete: "cascade" }),
-// })
+export const productVariants = pgTable('productVariants', {
+  id: serial('id').primaryKey(),
+  color: text('color').notNull(),
+  productType: text('productType').notNull(),
+  updated: timestamp('updated').defaultNow(),
+  productID: serial('productID')
+    .notNull()
+    .references(() => products.id, { onDelete: 'cascade' }),
+});
 
-// export const variantImages = pgTable("variantImages", {
-//   id: serial("id").primaryKey(),
-//   url: text("url").notNull(),
-//   size: real("size").notNull(),
-//   name: text("name").notNull(),
-//   order: real("order").notNull(),
-//   variantID: serial("variantID")
-//     .notNull()
-//     .references(() => productVariants.id, { onDelete: "cascade" }),
-// })
+export const variantImages = pgTable('variantImages', {
+  id: serial('id').primaryKey(),
+  url: text('url').notNull(),
+  size: real('size').notNull(),
+  name: text('name').notNull(),
+  order: real('order').notNull(),
+  variantID: serial('variantID')
+    .notNull()
+    .references(() => productVariants.id, { onDelete: 'cascade' }),
+});
 
-// export const variantTags = pgTable("variantTags", {
-//   id: serial("id").primaryKey(),
-//   tag: text("tag").notNull(),
-//   variantID: serial("variantID")
-//     .notNull()
-//     .references(() => productVariants.id, { onDelete: "cascade" }),
-// })
+export const variantTags = pgTable('variantTags', {
+  id: serial('id').primaryKey(),
+  tag: text('tag').notNull(),
+  variantID: serial('variantID')
+    .notNull()
+    .references(() => productVariants.id, { onDelete: 'cascade' }),
+});
 
-// export const productRelations = relations(products, ({ many }) => ({
-//   productVariants: many(productVariants, { relationName: "productVariants" }),
-//   reviews: many(reviews, { relationName: "reviews" }),
-// }))
+export const productRelations = relations(products, ({ many }) => ({
+  productVariants: many(productVariants, { relationName: 'productVariants' }),
+  reviews: many(reviews, { relationName: 'reviews' }),
+}));
 
-// export const productVariantsRelations = relations(
-//   productVariants,
-//   ({ many, one }) => ({
-//     product: one(products, {
-//       fields: [productVariants.productID],
-//       references: [products.id],
-//       relationName: "productVariants",
-//     }),
-//     variantImages: many(variantImages, { relationName: "variantImages" }),
-//     variantTags: many(variantTags, { relationName: "variantTags" }),
-//   })
-// )
+export const productVariantsRelations = relations(
+  productVariants,
+  ({ many, one }) => ({
+    product: one(products, {
+      fields: [productVariants.productID],
+      references: [products.id],
+      relationName: 'productVariants',
+    }),
+    variantImages: many(variantImages, { relationName: 'variantImages' }),
+    variantTags: many(variantTags, { relationName: 'variantTags' }),
+  })
+);
 
-// export const variantImagesRelations = relations(variantImages, ({ one }) => ({
-//   productVariants: one(productVariants, {
-//     fields: [variantImages.variantID],
-//     references: [productVariants.id],
-//     relationName: "variantImages",
-//   }),
-// }))
+export const variantImagesRelations = relations(variantImages, ({ one }) => ({
+  productVariants: one(productVariants, {
+    fields: [variantImages.variantID],
+    references: [productVariants.id],
+    relationName: 'variantImages',
+  }),
+}));
 
-// export const variantTagsRelations = relations(variantTags, ({ one }) => ({
-//   productVariants: one(productVariants, {
-//     fields: [variantTags.variantID],
-//     references: [productVariants.id],
-//     relationName: "variantTags",
-//   }),
-// }))
+export const variantTagsRelations = relations(variantTags, ({ one }) => ({
+  productVariants: one(productVariants, {
+    fields: [variantTags.variantID],
+    references: [productVariants.id],
+    relationName: 'variantTags',
+  }),
+}));
 
-// export const reviews = pgTable(
-//   "reviews",
-//   {
-//     id: serial("id").primaryKey(),
-//     rating: real("rating").notNull(),
-//     userID: text("userID")
-//       .notNull()
-//       .references(() => users.id, { onDelete: "cascade" }),
-//     productID: serial("productID")
-//       .notNull()
-//       .references(() => products.id, { onDelete: "cascade" }),
-//     comment: text("comment").notNull(),
-//     created: timestamp("created").defaultNow(),
-//   },
-//   (table) => {
-//     return {
-//       productIdx: index("productIdx").on(table.productID),
-//       userIdx: index("userIdx").on(table.userID),
-//     }
-//   }
-// )
+export const reviews = pgTable(
+  'reviews',
+  {
+    id: serial('id').primaryKey(),
+    rating: real('rating').notNull(),
+    userID: text('userID')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    productID: serial('productID')
+      .notNull()
+      .references(() => products.id, { onDelete: 'cascade' }),
+    comment: text('comment').notNull(),
+    created: timestamp('created').defaultNow(),
+  },
+  (table) => {
+    return {
+      productIdx: index('productIdx').on(table.productID),
+      userIdx: index('userIdx').on(table.userID),
+    };
+  }
+);
 
-// export const reviewRelations = relations(reviews, ({ one }) => ({
-//   user: one(users, {
-//     fields: [reviews.userID],
-//     references: [users.id],
-//     relationName: "user_reviews",
-//   }),
-//   product: one(products, {
-//     fields: [reviews.productID],
-//     references: [products.id],
-//     relationName: "reviews",
-//   }),
-// }))
+export const reviewRelations = relations(reviews, ({ one }) => ({
+  user: one(users, {
+    fields: [reviews.userID],
+    references: [users.id],
+    relationName: 'user_reviews',
+  }),
+  product: one(products, {
+    fields: [reviews.productID],
+    references: [products.id],
+    relationName: 'reviews',
+  }),
+}));
 
-// export const userRelations = relations(users, ({ many }) => ({
-//   reviews: many(reviews, { relationName: "user_reviews" }),
-//   orders: many(orders, { relationName: "user_orders" }),
-// }))
+export const userRelations = relations(users, ({ many }) => ({
+  reviews: many(reviews, { relationName: 'user_reviews' }),
+  orders: many(orders, { relationName: 'user_orders' }),
+}));
 
 export const orders = pgTable('orders', {
   id: serial('id').primaryKey(),
@@ -222,43 +224,43 @@ export const orders = pgTable('orders', {
   paymentIntentID: text('paymentIntentID'),
 });
 
-// export const ordersRelations = relations(orders, ({ one, many }) => ({
-//   user: one(users, {
-//     fields: [orders.userID],
-//     references: [users.id],
-//     relationName: "user_orders",
-//   }),
-//   orderProduct: many(orderProduct, { relationName: "orderProduct" }),
-// }))
+export const ordersRelations = relations(orders, ({ one, many }) => ({
+  user: one(users, {
+    fields: [orders.userID],
+    references: [users.id],
+    relationName: 'user_orders',
+  }),
+  orderProduct: many(orderProduct, { relationName: 'orderProduct' }),
+}));
 
-// export const orderProduct = pgTable("orderProduct", {
-//   id: serial("id").primaryKey(),
-//   quantity: integer("quantity").notNull(),
-//   productVariantID: serial("productVariantID")
-//     .notNull()
-//     .references(() => productVariants.id, { onDelete: "cascade" }),
-//   productID: serial("productID")
-//     .notNull()
-//     .references(() => products.id, { onDelete: "cascade" }),
-//   orderID: serial("orderID")
-//     .notNull()
-//     .references(() => orders.id, { onDelete: "cascade" }),
-// })
+export const orderProduct = pgTable('orderProduct', {
+  id: serial('id').primaryKey(),
+  quantity: integer('quantity').notNull(),
+  productVariantID: serial('productVariantID')
+    .notNull()
+    .references(() => productVariants.id, { onDelete: 'cascade' }),
+  productID: serial('productID')
+    .notNull()
+    .references(() => products.id, { onDelete: 'cascade' }),
+  orderID: serial('orderID')
+    .notNull()
+    .references(() => orders.id, { onDelete: 'cascade' }),
+});
 
-// export const orderProductRelations = relations(orderProduct, ({ one }) => ({
-//   order: one(orders, {
-//     fields: [orderProduct.orderID],
-//     references: [orders.id],
-//     relationName: "orderProduct",
-//   }),
-//   product: one(products, {
-//     fields: [orderProduct.productID],
-//     references: [products.id],
-//     relationName: "products",
-//   }),
-//   productVariants: one(productVariants, {
-//     fields: [orderProduct.productVariantID],
-//     references: [productVariants.id],
-//     relationName: "productVariants",
-//   }),
-// }))
+export const orderProductRelations = relations(orderProduct, ({ one }) => ({
+  order: one(orders, {
+    fields: [orderProduct.orderID],
+    references: [orders.id],
+    relationName: 'orderProduct',
+  }),
+  product: one(products, {
+    fields: [orderProduct.productID],
+    references: [products.id],
+    relationName: 'products',
+  }),
+  productVariants: one(productVariants, {
+    fields: [orderProduct.productVariantID],
+    references: [productVariants.id],
+    relationName: 'productVariants',
+  }),
+}));
